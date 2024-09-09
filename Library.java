@@ -4,13 +4,11 @@ import java.util.Objects;
 
 public class Library {
     private String name;
-    private static LinkedList<Book> books;
-    protected static Hashtable<User, LinkedList<Book>> information;
+    private static Hashtable<User, LinkedList<Book>> information;
 
     public Library(String name) {
         this.name = name;
         information = new Hashtable<>();
-        books = new LinkedList<>();
     }
 
     public String getName() {
@@ -22,22 +20,18 @@ public class Library {
     }
 
 
-    public void addBook(Book book){
-        books.add(book);
-    }
-    public void removeBook(Book book){
-        books.remove(book);
-    }
+
     public void addUser(User user){
-        User.counterUser++;
+        int count = User.getCounterUser();
+        User.setCounterUser(++count);
         user.setID();
         information.put(user,new LinkedList<>());
     }
 
     public void removeUser(User user){
         if (information.containsKey(user)) {
-            for (Book book : user.rentedBooks)
-                book.inUseBy=null;
+            for (Book book : user.getRentedBooks())
+                book.setInUseBy(null);
             information.remove(user);
         }
         else
@@ -53,8 +47,8 @@ public class Library {
             System.out.println("this book not found");
             return;
         }
-        if (book.inUseBy!=null){
-            if (Objects.equals(book.inUseBy, user.getName())) {
+        if (book.getInUseBy()!=null){
+            if (Objects.equals(book.getInUseBy(), user.getName())) {
                 System.out.println("You already have this book");
                 return;
             }
@@ -62,51 +56,54 @@ public class Library {
             return;
         }
         try {
-        user.renting[user.countOfRentingBook++]= book.getName();
+            byte count = user.getCountOfRentingBook();
+            user.getRenting()[count++]= book.getName();
+            user.setCountOfRentingBook(count);
         }catch (ArrayIndexOutOfBoundsException e){
              System.out.println("you can't rent a book");
              return;
         }
-        book.inUseBy=user.getName();
-        book.rentedBy.add(user);
-        user.rentedBooks.add(book);
-        information.put(user,user.rentedBooks);
+        book.setInUseBy(user.getName());
+        book.getRentedBy().add(user);
+        user.getRentedBooks().add(book);
+        information.put(user,user.getRentedBooks());
         System.out.println(user.getName() + " you successfully rent " + book.getName());
-        System.out.println("You can borrow " + (3-user.countOfRentingBook) + " more books");
+        System.out.println("You can borrow " + (3-user.getCountOfRentingBook()) + " more books");
     }
 
     public void returnBook(Book book,User user){
-        if (!user.rentedBooks.contains(book)){
+        if (!user.getRentedBooks().contains(book)){
             System.out.println("you didn't rent this book yet");
             return;
         }
-        book.inUseBy=null;
+        if (!information.containsKey(user)){
+            System.out.println("this user not exist");
+            return;
+        }
+        book.setInUseBy(null);
         for (int i = 2 ; i >= 0 ; i--){
-            if (Objects.equals(user.renting[i], book.getName())) {
+            if (Objects.equals(user.getRenting()[i], book.getName())) {
                 if (i == 2){
-                    user.renting[i] = null;
+                    user.getRenting()[i] = null;
                     break;
                 }
-                user.renting[i] = user.renting[i + 1];
+                user.getRenting()[i] = user.getRenting()[i + 1];
             }
         }
         System.out.println(user.getName()+  " you return " + book.getName());
-        user.countOfRentingBook--;
+        byte count = user.getCountOfRentingBook();
+        user.setCountOfRentingBook(--count);
+        System.out.println("you can rent " + (3 - user.getCountOfRentingBook()) + " more books");
     }
 
-    public  void getUsers(){
         int count = 1 ;
+    public  void getUsers(){
         for (User user : Library.information.keySet())
             System.out.print(count++ +"_ "+user.getName()+"\t");
         System.out.println();
     }
 
-    public void getBooks(){
-        int count = 1 ;
-        for (Book book : books)
-            System.out.print(count++ +"_ "+book.getName()+"\t");
-        System.out.println();
-    }
+
     public void sortUser(String sortBy){
         int i = 0;
         String[] array = new String[information.size()];
@@ -160,20 +157,20 @@ public class Library {
     }
     private static void merging(int low, int mid, int high, String[] array){
         int length = array.length;
-        String b[] = new String[length];
+        String tempArray[] = new String[length];
         int l1, l2, i;
         for(l1 = low, l2 = mid + 1, i = low; l1 <= mid && l2 <= high; i++) {
             if(array[l1].compareTo(array[l2])<0)
-                b[i] = array[l1++];
+                tempArray[i] = array[l1++];
             else
-                b[i] = array[l2++];
+                tempArray[i] = array[l2++];
         }
         while(l1 <= mid)
-            b[i++] = array[l1++];
+            tempArray[i++] = array[l1++];
         while(l2 <= high)
-            b[i++] = array[l2++];
+            tempArray[i++] = array[l2++];
         for(i = low; i <= high; i++)
-            array[i] = b[i];
+            array[i] = tempArray[i];
     }
     private static void mergeSort(String[] array, int low, int high){
         int mid;
@@ -208,10 +205,14 @@ public class Library {
         String[] string = new String[information.size()];
         for (User user : information.keySet())
             string[i++]=user.getName();
-        if (exponentialSearch(string, string.length, name))
+        if (exponentialSearch(string, string.length, name)){
            for (User user : information.keySet())
-            if (user.getName().equals(name))
+            if (user.getName().equals(name)) {
                 System.out.println(user);
+                return;
+            }
+        }
+            else System.out.println("your user not exist");
     }
 
     public void searchUserByID(String id){
@@ -219,24 +220,32 @@ public class Library {
         String[] string = new String[information.size()];
         for (User user : information.keySet())
             string[i++]=user.getID();
-        if (exponentialSearch(string, string.length, id))
+        if (exponentialSearch(string, string.length, id)){
           for (User user : information.keySet())
-             if (user.getID().equals(id))
+             if (user.getID().equals(id)){
                 System.out.println(user);
+                return;
+            }
+        }
+        else System.out.println("your user not exist");
     }
     public void searchBookByName(String name){
         int i = 0;
         String[] string = new String[books.size()];
         for (Book book : books)
             string[i++]=book.getName();
-        if (exponentialSearch(string, string.length, name))
+        if (exponentialSearch(string, string.length, name)){
              for (Book book : books)
-                 if (book.getName().equals(name))
+                 if (book.getName().equals(name)){
                      System.out.println(book);
+                     return;
+                 }
+            }
+        else System.out.println("your book not exist");
+
     }
     private static boolean binarySearch(String[] Array, String item, int low, int high) {
         mergeSort(Array,low, high);
-        int i = 0;
         while (low <= high) {
             int middle = (high + low) / 2;
             if (Array[middle].equals(item))
@@ -245,7 +254,6 @@ public class Library {
                 low = middle + 1;
             } else
                 high = middle - 1;
-            i++;
         }
         return false;
     }

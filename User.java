@@ -4,19 +4,51 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class User {
-    protected static int counterUser = 0;
+    private static int counterUser = 0;
     private String name;
     private String nationalCode;
     private String ID;
-    protected LinkedList<Book> rentedBooks;
-    protected byte countOfRentingBook = 0;
-    protected String[] renting;
+    private LinkedList<Book> rentedBooks;
+    private byte countOfRentingBook = 0;
+    private String[] renting;
     public User(String name, String nationalCode) {
         setName(name);
         setNationalCode(nationalCode);
         this.ID = null;
         rentedBooks = new LinkedList<>();
         renting = new String[3];
+    }
+
+    public String[] getRenting() {
+        return renting;
+    }
+
+    public void setRenting(String[] renting) {
+        this.renting = renting;
+    }
+
+    public byte getCountOfRentingBook() {
+        return countOfRentingBook;
+    }
+
+    public void setCountOfRentingBook(byte countOfRentingBook) {
+        this.countOfRentingBook = countOfRentingBook;
+    }
+
+    public LinkedList<Book> getRentedBooks() {
+        return rentedBooks;
+    }
+
+    public void setRentedBooks(LinkedList<Book> rentedBooks) {
+        this.rentedBooks = rentedBooks;
+    }
+
+    public static int getCounterUser() {
+        return counterUser;
+    }
+
+    public static void setCounterUser(int counterUser) {
+        User.counterUser = counterUser;
     }
 
     public String getName() {

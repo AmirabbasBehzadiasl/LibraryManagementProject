@@ -16,12 +16,29 @@ public class Main {
         Book book1 = new Book("the 5 Am Club","Psychology","22Bahman");
         Book book2 = new Book("wolves","Animals","22Bahman");
         Book book3 = new Book("you can do it","Psychology","22Bahman");
-        library.addBook(book1); 
-        library.addBook(book2);
-        library.addBook(book3);
         library.addBook(book);
-        library.searchUserByName("babak");
+        library.addBook(book1);
+        library.addBook(book3);
+        library.addBook(book2);
         library.searchBookByName("heart");
+        library.searchUserByName("amirr");
+        library.searchUserByID(user1.getID());
+        library.searchUser("145105");
+        library.searchBook("Animals");
+        library.sortBook("genre");
+        library.sortUser("name");
+        library.getUsers();
+        library.getBooks();
+        library.rentBook(book, user);
+        library.rentBook(book1, user);
+        library.removeBook(book2);
+        library.rentBook(book2, user);
+        library.rentBook(book3, user);
+        library.returnBook(book2, user);
+        library.removeUser(user);
+        library.rentBook(book2, user);
+        library.returnBook(book1, user);
+
         }
     }
 
