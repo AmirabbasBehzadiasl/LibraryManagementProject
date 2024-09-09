@@ -85,6 +85,22 @@ public class User {
             System.out.print(count++ +"_ "+book+"\t");
         System.out.println();
     }
+    public void addUser(){
+        int count = User.getCounterUser();
+        User.setCounterUser(++count);
+        this.setID();
+        Library.getInformation().put(this,new LinkedList<>());
+    }
+
+    public void removeUser(){
+        if (Library.getInformation().containsKey(this)) {
+            for (Book book : this.getRentedBooks())
+                book.setInUseBy(null);
+            Library.getInformation().remove(this);
+        }
+        else
+            System.out.println("Invalid user");
+    }
 
     @Override
     public String toString() {

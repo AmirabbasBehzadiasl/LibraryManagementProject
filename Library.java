@@ -11,6 +11,14 @@ public class Library {
         information = new Hashtable<>();
     }
 
+    public static Hashtable<User, LinkedList<Book>> getInformation() {
+        return information;
+    }
+
+    public static void setInformation(Hashtable<User, LinkedList<Book>> information) {
+        Library.information = information;
+    }
+
     public String getName() {
         return name;
     }
@@ -19,31 +27,12 @@ public class Library {
         this.name = name;
     }
 
-
-
-    public void addUser(User user){
-        int count = User.getCounterUser();
-        User.setCounterUser(++count);
-        user.setID();
-        information.put(user,new LinkedList<>());
-    }
-
-    public void removeUser(User user){
-        if (information.containsKey(user)) {
-            for (Book book : user.getRentedBooks())
-                book.setInUseBy(null);
-            information.remove(user);
-        }
-        else
-            System.out.println("Invalid user");
-    }
-
     public void rentBook(Book book, User user){
         if (!information.containsKey(user)) {
             System.out.println("You must register first");
             return;
         }
-        if (!books.contains(book)){
+        if (!Book.getBooks().contains(book)){
             System.out.println("this book not found");
             return;
         }
@@ -102,7 +91,12 @@ public class Library {
             System.out.print(count++ +"_ "+user.getName()+"\t");
         System.out.println();
     }
-
+    public void getBooks(){
+        int count = 1 ;
+        for (Book book : Book.getBooks())
+            System.out.print(count++ +"_ "+book.getName()+"\t");
+        System.out.println();
+    }
 
     public void sortUser(String sortBy){
         int i = 0;
@@ -132,16 +126,16 @@ public class Library {
     }
     public void sortBook(String sortBy){
         int i = 0;
-        String[] array = new String[books.size()];
+        String[] array = new String[Book.getBooks().size()];
         switch (sortBy){
             case "name" :
-                for (Book book : books)
+                for (Book book : Book.getBooks())
                     array[i++]=book.getName();
                 mergeSort(array, 0, array.length-1);
                 printArray(array);
                 break;
             case "genre":
-                for (Book book : books)
+                for (Book book : Book.getBooks())
                     array[i++]=book.getGenre();
                 mergeSort(array, 0, array.length-1);
                 printArray(array);
@@ -192,7 +186,7 @@ public class Library {
     }
 
     public void searchBook(String string){
-        for (Book book : books){
+        for (Book book : Book.getBooks()){
             if (book.getName().equals(string)||book.getGenre().equals(string)){
                 System.out.println(book);
                 return;
@@ -231,11 +225,11 @@ public class Library {
     }
     public void searchBookByName(String name){
         int i = 0;
-        String[] string = new String[books.size()];
-        for (Book book : books)
+        String[] string = new String[Book.getBooks().size()];
+        for (Book book : Book.getBooks())
             string[i++]=book.getName();
         if (exponentialSearch(string, string.length, name)){
-             for (Book book : books)
+             for (Book book : Book.getBooks())
                  if (book.getName().equals(name)){
                      System.out.println(book);
                      return;

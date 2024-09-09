@@ -17,7 +17,6 @@ public class Book {
         rentedBy = new LinkedList<>();
     }
 
-
     public static LinkedList<Book> getBooks() {
         return books;
     }
@@ -49,30 +48,30 @@ public class Book {
     public void setName(String bookName) {
         this.name = bookName;
     }
+
     public String getGenre() {
         return genre;
     }
+
     public void setGenre(String genre) {
         this.genre = genre;
     }
+
     public String getLibrary() {
         return Library;
     }
+
     public void setLibrary(String library) {
         Library = library;
     }
-    public void addBook(Book book){
-        books.add(book);
+
+    public void addBook(){
+        books.add(this);
     }
-    public void removeBook(Book book){
-        books.remove(book);
+
+    public void removeBook(){
+        books.remove(this);
     }
-//    public void getBooks(){
-//        int count = 1 ;
-//        for (Book book : books)
-//            System.out.print(count++ +"_ "+book.getName()+"\t");
-//        System.out.println();
-//    }
 
     @Override
     public String toString() {
