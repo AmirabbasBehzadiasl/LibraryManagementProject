@@ -1,19 +1,30 @@
+import sun.jvm.hotspot.code.SingletonBlob;
+
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Objects;
 
 public class Library {
+    private static Library instance= null;
     private String name;
     private static Hashtable<User, LinkedList<Book>> information;
 
-    public Library(String name) {
+    private Library(String name) {
         this.name = name;
         information = new Hashtable<>();
     }
+    public static synchronized Library getInstance(String name){
+        if (instance == null)
+            instance = new Library(name);
+
+        return instance;
+    }
+
 
     public static Hashtable<User, LinkedList<Book>> getInformation() {
         return information;
     }
+
 
     public static void setInformation(Hashtable<User, LinkedList<Book>> information) {
         Library.information = information;

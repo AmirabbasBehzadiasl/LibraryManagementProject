@@ -1,7 +1,12 @@
 
 public class Main {
     public static  void main(String[] args) {
-        Library library =new Library("22Bahman");
+        Library library = Library.getInstance("22Bahman");
+        Library library1 = Library.getInstance("22Bahman5444");
+        System.out.println(library.hashCode());
+        System.out.println(library1.hashCode());
+        System.out.println(library.getName());
+        System.out.println(library1.getName());
         User user3 =new User("reza","1514419");
         User user4 =new User("hossein","145105");
         User user2 =new User("kamran","241565");
