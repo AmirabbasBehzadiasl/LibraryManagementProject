@@ -2,8 +2,9 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Random;
-
+import  java.util.Scanner;
 public class User {
+    private Scanner in = new Scanner(System.in);
     private static int counterUser = 0;
     private String name;
     private String nationalCode;
@@ -15,6 +16,17 @@ public class User {
         setName(name);
         setNationalCode(nationalCode);
         this.ID = null;
+        rentedBooks = new LinkedList<>();
+        renting = new String[3];
+    }
+    public User(){
+        System.out.println("enter your name : ");
+        String name = in.nextLine();
+        setName(name);
+        System.out.println("enter your nationalCode : ");
+        String nationalCode = in.nextLine();
+        setNationalCode(nationalCode);
+        setID();
         rentedBooks = new LinkedList<>();
         renting = new String[3];
     }
@@ -71,7 +83,7 @@ public class User {
         return ID;
     }
 
-    protected void setID() {
+    public void setID() {
         this.ID = ""+LocalDate.now().getYear()+LocalDate.now().getMonthValue()+LocalDate.now().getDayOfMonth()+counterUser;
     }
 
