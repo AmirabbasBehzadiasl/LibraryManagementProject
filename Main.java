@@ -1,46 +1,63 @@
 import java.util.Scanner;
-
+import Exceptions.NationalCodeException;
 public class Main {
-    public static  void main(String[] args) {
+    public static  void main(String[] args) throws NationalCodeException {
         Scanner in = new Scanner(System.in);
-        Library library = Library.getInstance("22Bahman");
-        User user =new User();
-        User user4 =new User("hossein","145105");
-        User user2 =new User("kamran","241565");
-        User user3 =new User("amir","05789635");
-        User user1 =new User("babak","14965204");
-        user3.addUser();
-        user4.addUser();
-        user2.addUser();
-        user.addUser();
-        user1.addUser();
-        Book book = new Book("heart","Love", "22Bahman");
-        Book book1 = new Book("the 5 Am Club","Psychology","22Bahman");
-        Book book2 = new Book("wolves","Animals","22Bahman");
-        Book book3 = new Book("you can do it","Psychology","22Bahman");
-        book1.addBook();
-        book.addBook();
-        book3.addBook();
-        book2.addBook();
-        library.searchBookByName("heart");
-        library.searchUserByName("amirr");
-        library.searchUserByID(user.getID());
-        library.searchUser("145105");
-        library.searchBook("Animals");
-        library.sortBook("genre");
-        library.sortUser("name");
-        library.getUsers();
-        library.getBooks();
-        library.rentBook(book, user);
-        library.rentBook(book1, user);
-        book2.removeBook();
-        library.rentBook(book2, user);
-        library.rentBook(book3, user);
-        library.returnBook(book2, user);
-        user.removeUser();
-        library.rentBook(book2, user);
-        library.returnBook(book1, user);
-
+//        Library library = Library.getInstance("22Bahman");
+//        Book.create("heart", "romantic", library);
+//        Book.create("one", "dsf",library );
+//        Book.create("two", "dsf",library );
+//        Book.create("three", "dsf",library );
+//        Book.create("four", "dsf",library );
+//        Book.create("five", "dsf",library );
+//        library.searchBookByName("heart");
+//        library.searchUserByName("amirr");
+//        library.searchUserByID(user.getID());
+//        library.searchUser("145105");
+//        library.searchBook("Animals");
+//        library.sortBook("genre");
+//        library.sortUser("name");
+//        library.getUsers();
+//        library.getBooks();
+//        Book.loadAllBooks();
+//        Book.loadBook("five");
+//        Book.deleteBook("three");
+//        Book.loadAllBooks();
+//        Book.deleteBook("heart");
+//        Book.loadAllBooks();
+        Library library = new Library("22Bahman");
+        Library.load();
+        User.create("amir", "153123");
+        User.create("amirReza", "4444");
+        User.create("ali", "11111");
+        User.create("amirAli", "123131132");
+        User.create("mahdi", "5648487");
+        Book.create("one", "sdf",library);
+        Book.create("Two", "153",library);
+        Book.create("Three", "slk",library);
+        Book.create("Four", "ams",library);
+        Book.loadAllBooks();
+        Book.loadBook("four");
+        Book.loadBook("Four");
+        User.loadAllUsers();
+        User.loadUser("amirabbas");
+        User.loadUser("amirAli");
+        User.updateName("11111","ali2");
+        User.loadAllUsers();
+        Book.updateName("Four", "Four2");
+        Book.loadAllBooks();
+        Book.deleteBook("one");
+        User.delete("amir");
+        Book.loadAllBooks();
+        User.loadAllUsers();
+//        library.rentBook();
+        String s = null;
+        try {
+        if (s==null)
+            throw new NationalCodeException("sss");
+        }catch (ArrayIndexOutOfBoundsException NCE){
+            System.out.println("fff");
+        }
         }
     }
 

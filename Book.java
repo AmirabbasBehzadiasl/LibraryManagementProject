@@ -1,23 +1,21 @@
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 
 public class Book {
-    private static LinkedList<Book> books;
+    private static List<Book> books =  new LinkedList<>();
     private String name;
     private String genre;
-    private   String inUseBy;
-    private String Library;
-    private   LinkedList<User> rentedBy;
+    private User using;
+    private Library library;
+    private List<User> rentedBy;
 
-
-    public Book(String name, String genre, String library) {
-        setName(name);
-        setGenre(genre);
-        setLibrary(library);
-        books = new LinkedList<>();
-        rentedBy = new LinkedList<>();
+    public Book() {
+        this.rentedBy = new LinkedList<>();
     }
 
-    public static LinkedList<Book> getBooks() {
+    public static List<Book> getBooks() {
         return books;
     }
 
@@ -25,24 +23,24 @@ public class Book {
         Book.books = books;
     }
 
-    public LinkedList<User> getRentedBy() {
-        return rentedBy;
+    public List<User> getRentedBy() {
+        return this.rentedBy;
     }
 
     public void setRentedBy(LinkedList<User> rentedBy) {
         this.rentedBy = rentedBy;
     }
 
-    public String getInUseBy() {
-        return inUseBy;
+    public User getUsing() {
+        return this.using;
     }
 
-    public void setInUseBy(String inUseBy) {
-        this.inUseBy = inUseBy;
+    public void setUsing(User using) {
+        this.using = using;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String bookName) {
@@ -50,7 +48,7 @@ public class Book {
     }
 
     public String getGenre() {
-        return genre;
+        return this.genre;
     }
 
     public void setGenre(String genre) {
@@ -58,29 +56,89 @@ public class Book {
     }
 
     public String getLibrary() {
-        return Library;
+        return this.library.getName();
     }
 
-    public void setLibrary(String library) {
-        Library = library;
+    public void setLibrary(Library library) {
+        this.library = library;
     }
 
-    public void addBook(){
-        books.add(this);
+    public static void create(String name , String genre , Library library){
+        Book book = new Book();
+        books.add(book);
+        book.setName(name);
+        book.setGenre(genre);
+        book.setLibrary(library);
+    }
+    public static void loadAllBooks(){
+        Iterator<Book> bookIterator = books.iterator();
+        int i = 0;
+        while (bookIterator.hasNext())
+            System.out.print(++i + ": " + bookIterator.next().name + " ");
+        System.out.println();
+    }
+    public static void loadBook(String bookName){
+        Iterator<Book> bookIterator = books.iterator();
+        while (bookIterator.hasNext()) {
+            Book s = bookIterator.next();
+            if (s.name.equals(bookName)) {
+                System.out.println(s);
+                return;
+            }
+        }
+            System.out.println("not found");
+    }
+    public static void updateUser(String bookName, User newUser){
+        Iterator<Book> iterator = books.iterator();
+        while (iterator.hasNext()){
+            Book s = iterator.next();
+            if (Objects.equals(s.name, bookName)){
+                s.setUsing(newUser);
+                return;
+            }
+            System.out.println("this book not exist");
+        }
+    }
+    public static void updateName(String bookName, String newName){
+        Iterator<Book> iterator = books.iterator();
+        while (iterator.hasNext()){
+            Book s = iterator.next();
+            if (Objects.equals(s.name, bookName)){
+                s.setName(newName);
+                return;
+            }
+            System.out.println("this book not exist");
+        }
     }
 
-    public void removeBook(){
-        books.remove(this);
+    public static void deleteBook(String bookName){
+        Iterator<Book> bookIterator = books.iterator();
+        while (bookIterator.hasNext()){
+        Book book = bookIterator.next();
+            if (book.name.equals(bookName)){
+                bookIterator.remove();
+                return;
+            }
+        }
+        System.out.println("this book not found");
     }
-
+    public static void searchBook(String string){
+        for (Book book : books){
+            if (book.getName().equals(string)||book.getGenre().equals(string)){
+                System.out.println(book);
+                return;
+            }
+        }
+        System.out.println("your book not exist");
+    }
     @Override
     public String toString() {
         return "Book{" +
-                "name='" + name + '\'' +
-                ", genre='" + genre + '\'' +
-                ", inUseBy='" + inUseBy + '\'' +
-                ", Library='" + Library + '\'' +
-                ", rentedBy=" + rentedBy +
+                "name='" + this.name + '\'' +
+                ", genre='" + this.genre + '\'' +
+                ", inUseBy='" + this.using + '\'' +
+                ", Library='" + this.library.getName() + '\'' +
+                ", rentedBy=" + this.rentedBy +
                 '}';
     }
 }
