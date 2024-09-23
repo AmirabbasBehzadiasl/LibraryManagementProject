@@ -1,48 +1,32 @@
 import java.util.Scanner;
 import Exceptions.NationalCodeException;
+import Exceptions.NullException;
+import Exceptions.NumberFormatException;
+import Exceptions.StringLengthException;
+
 public class Main {
-    public static  void main(String[] args) throws NationalCodeException {
+    public static  void main(String[] args) throws StringLengthException, NationalCodeException, NullException, NumberFormatException {
         Scanner in = new Scanner(System.in);
-//        Library library = Library.getInstance("22Bahman");
-//        Book.create("heart", "romantic", library);
-//        Book.create("one", "dsf",library );
-//        Book.create("two", "dsf",library );
-//        Book.create("three", "dsf",library );
-//        Book.create("four", "dsf",library );
-//        Book.create("five", "dsf",library );
-//        library.searchBookByName("heart");
-//        library.searchUserByName("amirr");
-//        library.searchUserByID(user.getID());
-//        library.searchUser("145105");
-//        library.searchBook("Animals");
-//        library.sortBook("genre");
-//        library.sortUser("name");
-//        library.getUsers();
-//        library.getBooks();
-//        Book.loadAllBooks();
-//        Book.loadBook("five");
-//        Book.deleteBook("three");
-//        Book.loadAllBooks();
-//        Book.deleteBook("heart");
-//        Book.loadAllBooks();
-        Library library = new Library("22Bahman");
+        Library library = new Library("sdcccf");
+        library.setName(in.nextLine());
         Library.load();
-        User.create("amir", "153123");
-        User.create("amirReza", "4444");
-        User.create("ali", "11111");
-        User.create("amirAli", "123131132");
-        User.create("mahdi", "5648487");
-        Book.create("one", "sdf",library);
-        Book.create("Two", "153",library);
-        Book.create("Three", "slk",library);
-        Book.create("Four", "ams",library);
+        User.create("amirabbas", "0391581568");
+        User.create("amirReza", "3681593215");
+        User.create("aliMohmammadi", "7896541233");
+        User.create("amirAli", "7539512586");
+        User.create("mahdiHasani", "1478963255");
+        User.create("mahdiAkbari", "1478963255");
+        Book.create("oneee", "sdfffff",library);
+        Book.create("Twooo", "15ff3",library);
+        Book.create("Threee", "slffk",library);
+        Book.create("Fourrr", "amsff",library);
         Book.loadAllBooks();
         Book.loadBook("four");
         Book.loadBook("Four");
         User.loadAllUsers();
         User.loadUser("amirabbas");
         User.loadUser("amirAli");
-        User.updateName("11111","ali2");
+        User.updateName("1118888511","ali2");
         User.loadAllUsers();
         Book.updateName("Four", "Four2");
         Book.loadAllBooks();
@@ -50,15 +34,7 @@ public class Main {
         User.delete("amir");
         Book.loadAllBooks();
         User.loadAllUsers();
-//        library.rentBook();
-        String s = null;
-        try {
-        if (s==null)
-            throw new NationalCodeException("sss");
-        }catch (ArrayIndexOutOfBoundsException NCE){
-            System.out.println("fff");
-        }
-        }
+    }
     }
 
 

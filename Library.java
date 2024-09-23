@@ -1,3 +1,7 @@
+import Exceptions.NullException;
+import Exceptions.RentBookException;
+import Exceptions.StringLengthException;
+
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Objects;
@@ -8,7 +12,11 @@ public class Library {
     private static String name;
     private static Hashtable<User, LinkedList<Book>> information;
 
-    public Library(String name) {
+    public Library(String name) throws StringLengthException, NullException {
+        if (name==null)
+            throw new NullException();
+        if (name.length()<5)
+            throw new StringLengthException();
         Library.name = name;
         information = new Hashtable<>();
     }
@@ -24,11 +32,15 @@ public class Library {
         return this.name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String name) throws NullException, StringLengthException {
+        if (name==null)
+            throw new NullException();
+        if (name.length()<5)
+            throw new StringLengthException();
+        Library.name = name;
     }
 
-    public void rentBook(Book book, User user){
+    public void rentBook(Book book, User user) throws RentBookException, NullException {
         if (!information.containsKey(user)) {
             System.out.println("You must register first");
             return;
@@ -38,30 +50,25 @@ public class Library {
             return;
         }
         if (book.getUsing()!=null){
-            if (Objects.equals(book.getUsing(), user.getName())) {
+            if (Objects.equals(book.getUsing(), user.getFullName())) {
                 System.out.println("You already have this book");
                 return;
             }
-            System.out.println("Hi " + user.getName() +" this book rented before");
+            System.out.println("Hi " + user.getFullName() +" this book rented before");
             return;
         }
-        try {
-            byte count = user.getCountOfRentingBook();
-            user.getRenting()[count++]= book.getName();
-            user.setCountOfRentingBook(count);
-        }catch (ArrayIndexOutOfBoundsException e){
-             System.out.println("you can't rent a book");
-             return;
-        }
+        byte count = user.getCountOfRentingBook();
+        user.getRenting()[count++]= book.getName();
+        user.setCountOfRentingBook(count);
         book.setUsing(user);
         book.getRentedBy().add(user);
         user.getRentedBooks().add(book);
         information.put(user,user.getRentedBooks());
-        System.out.println(user.getName() + " you successfully rent " + book.getName());
+        System.out.println(user.getFullName() + " you successfully rent " + book.getName());
         System.out.println("You can borrow " + (3-user.getCountOfRentingBook()) + " more books");
     }
 
-    public void returnBook(Book book,User user){
+    public void returnBook(Book book,User user) throws RentBookException, NullException {
         if (!user.getRentedBooks().contains(book)){
             System.out.println("you didn't rent this book yet");
             return;
@@ -80,7 +87,7 @@ public class Library {
                 user.getRenting()[i] = user.getRenting()[i + 1];
             }
         }
-        System.out.println(user.getName()+  " you return " + book.getName());
+        System.out.println(user.getFullName()+  " you return " + book.getName());
         byte count = user.getCountOfRentingBook();
         user.setCountOfRentingBook(--count);
         System.out.println("you can rent " + (3 - user.getCountOfRentingBook()) + " more books");
@@ -98,7 +105,7 @@ public class Library {
                  break;
             case "name" :
                 for (User user : information.keySet())
-                    array[i++]=user.getName();
+                    array[i++]=user.getFullName();
                 mergeSort(array, 0, array.length-1);
                 printArray(array);
                 break;

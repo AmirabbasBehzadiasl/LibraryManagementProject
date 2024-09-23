@@ -1,3 +1,5 @@
+import Exceptions.NullException;
+import Exceptions.StringLengthException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,7 +37,9 @@ public class Book {
         return this.using;
     }
 
-    public void setUsing(User using) {
+    public void setUsing(User using) throws NullException {
+        if (using==null)
+            throw new NullException();
         this.using = using;
     }
 
@@ -43,7 +47,11 @@ public class Book {
         return this.name;
     }
 
-    public void setName(String bookName) {
+    public void setName(String bookName) throws NullException, StringLengthException {
+        if(bookName==null)
+            throw new NullException();
+        if (bookName.length()<5)
+            throw new StringLengthException();
         this.name = bookName;
     }
 
@@ -51,7 +59,11 @@ public class Book {
         return this.genre;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(String genre) throws StringLengthException, NullException {
+        if (genre==null)
+            throw new NullException();
+        if (genre.length()<5)
+            throw new StringLengthException();
         this.genre = genre;
     }
 
@@ -63,7 +75,7 @@ public class Book {
         this.library = library;
     }
 
-    public static void create(String name , String genre , Library library){
+    public static void create(String name , String genre , Library library) throws StringLengthException, NullException {
         Book book = new Book();
         books.add(book);
         book.setName(name);
@@ -88,7 +100,7 @@ public class Book {
         }
             System.out.println("not found");
     }
-    public static void updateUser(String bookName, User newUser){
+    public static void updateUser(String bookName, User newUser) throws NullException {
         Iterator<Book> iterator = books.iterator();
         while (iterator.hasNext()){
             Book s = iterator.next();
@@ -99,7 +111,7 @@ public class Book {
             System.out.println("this book not exist");
         }
     }
-    public static void updateName(String bookName, String newName){
+    public static void updateName(String bookName, String newName) throws StringLengthException, NullException {
         Iterator<Book> iterator = books.iterator();
         while (iterator.hasNext()){
             Book s = iterator.next();
