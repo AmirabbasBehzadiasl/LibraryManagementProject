@@ -1,16 +1,13 @@
 import Exceptions.NullException;
 import Exceptions.RentBookException;
 import Exceptions.StringLengthException;
-
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Objects;
 import static Search.Search.mergeSort;
 
 public class Library {
-    private static Library instance= null;
     private static String name;
-    private static Hashtable<User, LinkedList<Book>> information;
 
     public Library(String name) throws StringLengthException, NullException {
         if (name==null)
@@ -18,18 +15,10 @@ public class Library {
         if (name.length()<5)
             throw new StringLengthException();
         Library.name = name;
-        information = new Hashtable<>();
-    }
-    public static Hashtable<User, LinkedList<Book>> getInformation() {
-        return information;
-    }
-
-    public static void setInformation(Hashtable<User, LinkedList<Book>> information) {
-        Library.information = information;
     }
 
     public String getName() {
-        return this.name;
+        return Library.name;
     }
 
     public void setName(String name) throws NullException, StringLengthException {
@@ -40,32 +29,47 @@ public class Library {
         Library.name = name;
     }
 
-    public void rentBook(Book book, User user) throws RentBookException, NullException {
-        if (!information.containsKey(user)) {
+    public void rentBook(Book book, User user) throws NullException, RentBookException {
+        if (!User.getUsers().contains(user)) {
             System.out.println("You must register first");
             return;
         }
         if (!Book.getBooks().contains(book)){
-            System.out.println("this book not found");
+            System.out.println("this book not exist");
             return;
         }
-        if (book.getUsing()!=null){
-            if (Objects.equals(book.getUsing(), user.getFullName())) {
+        if (book.getUserRentingThisBook()!=null){
+            if (book.getUserRentingThisBook().getUserName().equals(user.getUserName())){
                 System.out.println("You already have this book");
                 return;
             }
-            System.out.println("Hi " + user.getFullName() +" this book rented before");
+            System.out.println("Hi " + user.getUserName() +" this book rented before");
             return;
         }
         byte count = user.getCountOfRentingBook();
         user.getRenting()[count++]= book.getName();
         user.setCountOfRentingBook(count);
-        book.setUsing(user);
-        book.getRentedBy().add(user);
-        user.getRentedBooks().add(book);
-        information.put(user,user.getRentedBooks());
-        System.out.println(user.getFullName() + " you successfully rent " + book.getName());
+        user.setRentedBooks(book.getName());
+        book.setUserRentingThisBook(user);
+        book.getUsersRentedThisBook().add(user);
+        System.out.println(user.getUserName() + " you successfully rent " + book.getName());
         System.out.println("You can borrow " + (3-user.getCountOfRentingBook()) + " more books");
+    }
+
+    public static User getUserByNationalCode(String nationalCode){
+        for (User user : User.getUsers())
+            if (user.getNationalCode().equals(nationalCode)){
+                return user;
+            }
+
+        return null;
+    }
+    public static Book getBookByName(String bookName){
+        for (Book book : Book.getBooks())
+            if (bookName.equals(book.getName()))
+                 return book;
+
+        return null;
     }
 
     public void returnBook(Book book,User user) throws RentBookException, NullException {
@@ -73,11 +77,11 @@ public class Library {
             System.out.println("you didn't rent this book yet");
             return;
         }
-        if (!information.containsKey(user)){
-            System.out.println("this user not exist");
+        if (!User.getUsers().contains(user)){
+            System.out.println("invalid user");
             return;
         }
-        book.setUsing(null);
+        book.setUserRentingThisBook(null);
         for (int i = 2 ; i >= 0 ; i--){
             if (Objects.equals(user.getRenting()[i], book.getName())) {
                 if (i == 2){
@@ -87,7 +91,7 @@ public class Library {
                 user.getRenting()[i] = user.getRenting()[i + 1];
             }
         }
-        System.out.println(user.getFullName()+  " you return " + book.getName());
+        System.out.println(user.getUserName()+  " you return " + book.getName());
         byte count = user.getCountOfRentingBook();
         user.setCountOfRentingBook(--count);
         System.out.println("you can rent " + (3 - user.getCountOfRentingBook()) + " more books");
@@ -95,22 +99,22 @@ public class Library {
 
     public void sortUser(String sortBy){
         int i = 0;
-        String[] array = new String[information.size()];
+        String[] array = new String[User.getUsers().size()];
         switch (sortBy){
             case "id" :
-                for (User user : information.keySet())
+                for (User user : User.getUsers())
                     array[i++]=user.getID();
                 mergeSort(array, 0, array.length-1);
                 printArray(array);
                  break;
             case "name" :
-                for (User user : information.keySet())
-                    array[i++]=user.getFullName();
+                for (User user : User.getUsers())
+                    array[i++]=user.getUserName();
                 mergeSort(array, 0, array.length-1);
                 printArray(array);
                 break;
             case "nationalCode":
-                for (User user : information.keySet())
+                for (User user : User.getUsers())
                     array[i++]=user.getNationalCode();
                 mergeSort(array, 0, array.length-1);
                 printArray(array);
@@ -119,6 +123,7 @@ public class Library {
                 System.out.println("Invalid input . You must enter (id/name/nationalCode) ");
         }
     }
+
     public void sortBook(String sortBy){
         int i = 0;
         String[] array = new String[Book.getBooks().size()];
@@ -139,16 +144,20 @@ public class Library {
                 System.out.println("Invalid input . You must enter (name/genre) ");
         }
     }
+
     private void printArray(String[] array){
         int count = 1 ;
         for (String string : array) System.out.print(count++ +": "+ string+" ");
         System.out.println();
     }
+
     public static void load(){
-        System.out.println(Library.name+" library have " + information.size() + " user and " + Book.getBooks().size() + " book");
+        System.out.println(Library.name+" library have " + User.getUsers().size() + " user and " + Book.getBooks().size() + " book");
     }
+
     public static void updateName( String newName){
         Library.name=newName;
     }
+
 }
 

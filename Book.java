@@ -8,13 +8,13 @@ import java.util.Objects;
 public class Book {
     private static List<Book> books =  new LinkedList<>();
     private String name;
-    private String genre;
-    private User using;
+    private Genre genre;
+    private User userRentingThisBook;
     private Library library;
-    private List<User> rentedBy;
+    private List<User> usersRentedThisBook;
 
     public Book() {
-        this.rentedBy = new LinkedList<>();
+        this.usersRentedThisBook = new LinkedList<>();
     }
 
     public static List<Book> getBooks() {
@@ -25,22 +25,20 @@ public class Book {
         Book.books = books;
     }
 
-    public List<User> getRentedBy() {
-        return this.rentedBy;
+    public List<User> getUsersRentedThisBook() {
+        return this.usersRentedThisBook;
     }
 
-    public void setRentedBy(LinkedList<User> rentedBy) {
-        this.rentedBy = rentedBy;
+    public void setUsersRentedThisBook(LinkedList<User> usersRentedThisBook) {
+        this.usersRentedThisBook = usersRentedThisBook;
     }
 
-    public User getUsing() {
-        return this.using;
+    public User getUserRentingThisBook() {
+        return this.userRentingThisBook;
     }
 
-    public void setUsing(User using) throws NullException {
-        if (using==null)
-            throw new NullException();
-        this.using = using;
+    public void setUserRentingThisBook(User userRentingThisBook) {
+        this.userRentingThisBook = userRentingThisBook;
     }
 
     public String getName() {
@@ -56,13 +54,13 @@ public class Book {
     }
 
     public String getGenre() {
-        return this.genre;
+        return this.genre.toString();
     }
 
-    public void setGenre(String genre) throws StringLengthException, NullException {
+    public void setGenre(Genre genre) throws StringLengthException, NullException {
         if (genre==null)
             throw new NullException();
-        if (genre.length()<5)
+        if (genre.toString().length()<5)
             throw new StringLengthException();
         this.genre = genre;
     }
@@ -75,13 +73,14 @@ public class Book {
         this.library = library;
     }
 
-    public static void create(String name , String genre , Library library) throws StringLengthException, NullException {
+    public static void create(String name , Genre genre , Library library) throws StringLengthException, NullException {
         Book book = new Book();
-        books.add(book);
         book.setName(name);
         book.setGenre(genre);
         book.setLibrary(library);
+        books.add(book);
     }
+
     public static void loadAllBooks(){
         Iterator<Book> bookIterator = books.iterator();
         int i = 0;
@@ -89,38 +88,35 @@ public class Book {
             System.out.print(++i + ": " + bookIterator.next().name + " ");
         System.out.println();
     }
+
     public static void loadBook(String bookName){
-        Iterator<Book> bookIterator = books.iterator();
-        while (bookIterator.hasNext()) {
-            Book s = bookIterator.next();
-            if (s.name.equals(bookName)) {
-                System.out.println(s);
+        for (Book book : books) {
+            if (book.name.equals(bookName)) {
+                System.out.println(book);
                 return;
             }
         }
-            System.out.println("not found");
+            System.out.println("book eith name ( " + bookName + " ) not exist");
     }
+
     public static void updateUser(String bookName, User newUser) throws NullException {
-        Iterator<Book> iterator = books.iterator();
-        while (iterator.hasNext()){
-            Book s = iterator.next();
-            if (Objects.equals(s.name, bookName)){
-                s.setUsing(newUser);
+        for (Book book : books) {
+            if (Objects.equals(book.name, bookName)) {
+                book.setUserRentingThisBook(newUser);
                 return;
             }
             System.out.println("this book not exist");
         }
     }
+
     public static void updateName(String bookName, String newName) throws StringLengthException, NullException {
-        Iterator<Book> iterator = books.iterator();
-        while (iterator.hasNext()){
-            Book s = iterator.next();
-            if (Objects.equals(s.name, bookName)){
-                s.setName(newName);
+        for (Book book : books) {
+            if (Objects.equals(book.name, bookName)) {
+                book.setName(newName);
                 return;
             }
-            System.out.println("this book not exist");
         }
+        System.out.println("book with  name ( " + bookName + " ) not exist");
     }
 
     public static void deleteBook(String bookName){
@@ -132,25 +128,27 @@ public class Book {
                 return;
             }
         }
-        System.out.println("this book not found");
+        System.out.println("book with  name ( " + bookName + " ) not exist");
     }
-    public static void searchBook(String string){
+
+    public static Book searchBook(String string){
         for (Book book : books){
             if (book.getName().equals(string)||book.getGenre().equals(string)){
-                System.out.println(book);
-                return;
+                return book;
             }
         }
-        System.out.println("your book not exist");
+        System.out.println("book with  name/genre ( " + string + " ) not exist");
+        return new Book();
     }
+
     @Override
     public String toString() {
         return "Book{" +
                 "name='" + this.name + '\'' +
                 ", genre='" + this.genre + '\'' +
-                ", inUseBy='" + this.using + '\'' +
+                ", inUseBy='" + this.userRentingThisBook + '\'' +
                 ", Library='" + this.library.getName() + '\'' +
-                ", rentedBy=" + this.rentedBy +
+                ", rentedBy=" + this.usersRentedThisBook +
                 '}';
     }
 }
