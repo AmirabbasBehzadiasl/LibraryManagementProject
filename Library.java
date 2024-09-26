@@ -1,8 +1,6 @@
 import Exceptions.NullException;
 import Exceptions.RentBookException;
 import Exceptions.StringLengthException;
-import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.Objects;
 import static Search.Search.mergeSort;
 

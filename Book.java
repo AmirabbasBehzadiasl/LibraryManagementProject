@@ -131,14 +131,14 @@ public class Book {
         System.out.println("book with  name ( " + bookName + " ) not exist");
     }
 
-    public static Book searchBook(String string){
+    public static void searchBook(String string){
         for (Book book : books){
             if (book.getName().equals(string)||book.getGenre().equals(string)){
-                return book;
+                System.out.println(book);
+                return;
             }
         }
         System.out.println("book with  name/genre ( " + string + " ) not exist");
-        return new Book();
     }
 
     @Override

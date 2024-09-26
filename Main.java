@@ -6,15 +6,7 @@ public class Main {
     public static  void main(String[] args) throws StringLengthException, NationalCodeException, NullException, NumberFormatException, RentBookException {
         Scanner in = new Scanner(System.in);
         System.out.println("Enter a name for library : ");
-        Library library = new Library("safasf");
-        User.create("amirabbas", "1234657899");
-        Book.create("firstBook", Genre.DRAMA,library );
-        User.searchUser("1234657899");
-        User.loadAllUsers();
-        library.rentBook(Library.getBookByName("firstBook"),Library.getUserByNationalCode("1234657899"));
-        User.loadUser("amirabbas");
-        System.out.println("test");
-        /*
+        Library library = new Library(in.nextLine());
         System.out.println("1 to exit");
         System.out.println("2: create a user ");
         System.out.println("3: create a book ");
@@ -113,13 +105,13 @@ public class Main {
                 case 12 : {
                     System.out.println("enter nationalCode/ID");
                     String user = in.nextLine();
-                    System.out.println(User.searchUser(user));
+                    User.searchUser(user);
                     break ;
                 }
                 case 13:{
                     System.out.println("enter name of book/genre");
                     String book = in.nextLine();
-                    System.out.println(Book.searchBook(book));
+                    Book.searchBook(book);
                     break ;
                 }
                 case 14 : {
@@ -169,11 +161,8 @@ public class Main {
                 }
 
             }
-        }*/
+        }
         System.out.println("finish");
 
     }
-    }
-
-
-
+}
